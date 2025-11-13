@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../app/generated/prisma"
@@ -15,18 +9,68 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+// ENUMS
+
+enum EstadoTestimonio {
+  borrador
+  en_revision
+  aprobado
+  publicado
+  rechazado
+  archivado
+}
+
+enum TipoMedio {
+  imagen
+  video
+}
+
+enum TipoCategoria {
+  producto
+  evento
+  cliente
+  industria
+  servicio
+}
+
+enum DecisionRevision {
+  aprobar
+  rechazar
+}
+
+enum ModalidadTestimonio {
+  texto_imagen
+  video
+}
+
+enum Rol {
+  admin
+  editor
+}
+
+// AUTH
+
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  password      String?
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  id                  String       @id @default(cuid())
+  name                String?
+  email               String       @unique
+  password            String?
+  emailVerified       DateTime?
+  image               String?
+  activo              Boolean      @default(true)
+  rol                 Rol
+  organizacionId      String
+  organizacion        Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+  accounts            Account[]
+  sessions            Session[]
+  espacios            Espacio[]
+  testimoniosEditados Testimonio[]
+  revisiones          Revision[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([organizacionId])
 }
 
 model Account {
@@ -66,4 +110,138 @@ model VerificationToken {
   expires    DateTime
 
   @@id([identifier, token])
+}
+
+// TESTIMONIAL CMS
+
+model Organizacion {
+  id         String      @id @default(uuid())
+  nombre     String
+  slug       String      @unique
+  creadoEn   DateTime    @default(now())
+  usuarios   User[]
+  espacios   Espacio[]
+  categorias Categoria[]
+  etiquetas  Etiqueta[]
+  medios     Medio[]
+}
+
+model Persona {
+  id             String       @id @default(uuid())
+  nombreCompleto String
+  correo         String?
+  fotoUrl        String?
+  testimonios    Testimonio[]
+}
+
+model Espacio {
+  id             String        @id @default(uuid())
+  organizacionId String
+  creadoPorId    String
+  nombre         String
+  titulo         String?
+  mensaje        String?
+  creadoEn       DateTime      @default(now())
+  organizacion   Organizacion? @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+  creadoPor      User          @relation(fields: [creadoPorId], references: [id])
+  preguntas      Pregunta[]
+  testimonios    Testimonio[]
+  categorias     Categoria[]
+
+  @@index([organizacionId])
+  @@index([creadoPorId])
+}
+
+model Pregunta {
+  id        String  @id @default(uuid())
+  espacioId String
+  texto     String
+  espacio   Espacio @relation(fields: [espacioId], references: [id], onDelete: Cascade)
+
+  @@index([espacioId])
+}
+
+model Testimonio {
+  id               String              @id @default(uuid())
+  espacioId        String
+  personaId        String
+  modalidad        ModalidadTestimonio @default(texto_imagen)
+  titulo           String
+  texto            String?
+  estado           EstadoTestimonio    @default(borrador)
+  destacado        Boolean             @default(false)
+  calificacion     Int                 @default(5)
+  publicadoEn      DateTime?
+  actualizadoPorId String?
+  creadoEn         DateTime            @default(now())
+  actualizadoEn    DateTime            @updatedAt
+  espacio          Espacio             @relation(fields: [espacioId], references: [id], onDelete: Cascade)
+  persona          Persona             @relation(fields: [personaId], references: [id])
+  actualizadoPor   User?               @relation(fields: [actualizadoPorId], references: [id])
+  etiquetas        Etiqueta[]
+  revisiones       Revision[]
+  medios           Medio[]
+
+  @@index([espacioId])
+  @@index([personaId])
+  @@index([actualizadoPorId])
+}
+
+model Medio {
+  id               String       @id @default(uuid())
+  organizacionId   String
+  testimonioId     String
+  tipo             TipoMedio
+  url              String
+  ancho            Int
+  alto             Int
+  duracionSegundos Int?
+  bytes            BigInt?
+  leyenda          String?
+  creadoEn         DateTime     @default(now())
+  organizacion     Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+  testimonio       Testimonio   @relation(fields: [testimonioId], references: [id], onDelete: Cascade)
+
+  @@index([organizacionId])
+  @@index([testimonioId])
+}
+
+model Categoria {
+  id             String        @id @default(uuid())
+  organizacionId String
+  espacioId      String
+  tipo           TipoCategoria
+  nombre         String
+  slug           String
+  padreId        String
+  organizacion   Organizacion  @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+  espacios       Espacio[]
+  padre          Categoria     @relation("CategoriaPadre", fields: [padreId], references: [id], onDelete: Cascade)
+  subcategorias  Categoria[]   @relation("CategoriaPadre")
+
+  @@index([organizacionId])
+}
+
+model Etiqueta {
+  id             String       @id @default(uuid())
+  organizacionId String
+  nombre         String
+  organizacion   Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+  testimonios    Testimonio[]
+
+  @@index([organizacionId])
+}
+
+model Revision {
+  id           String           @id @default(uuid())
+  testimonioId String
+  revisorId    String
+  decision     DecisionRevision
+  notas        String?
+  creadoEn     DateTime         @default(now())
+  testimonio   Testimonio       @relation(fields: [testimonioId], references: [id], onDelete: Cascade)
+  revisor      User             @relation(fields: [revisorId], references: [id], onDelete: Cascade)
+
+  @@index([testimonioId])
+  @@index([revisorId])
 }
