@@ -63,12 +63,12 @@ model User {
   organizacion        Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
   accounts            Account[]
   sessions            Session[]
-  espacios            Espacio[]
   testimoniosEditados Testimonio[]
   revisiones          Revision[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  categorias Categoria[]
 
   @@index([organizacionId])
 }
@@ -120,7 +120,6 @@ model Organizacion {
   slug       String      @unique
   creadoEn   DateTime    @default(now())
   usuarios   User[]
-  espacios   Espacio[]
   categorias Categoria[]
   etiquetas  Etiqueta[]
   medios     Medio[]
@@ -129,12 +128,12 @@ model Organizacion {
 model Persona {
   id             String       @id @default(uuid())
   nombreCompleto String
-  correo         String?
+  correo         String       @unique
   fotoUrl        String?
   testimonios    Testimonio[]
 }
 
-model Espacio {
+model Categoria {
   id             String        @id @default(uuid())
   organizacionId String
   creadoPorId    String
@@ -146,24 +145,23 @@ model Espacio {
   creadoPor      User          @relation(fields: [creadoPorId], references: [id])
   preguntas      Pregunta[]
   testimonios    Testimonio[]
-  categorias     Categoria[]
 
   @@index([organizacionId])
   @@index([creadoPorId])
 }
 
 model Pregunta {
-  id        String  @id @default(uuid())
-  espacioId String
-  texto     String
-  espacio   Espacio @relation(fields: [espacioId], references: [id], onDelete: Cascade)
+  id          String    @id @default(uuid())
+  categoriaId String
+  texto       String
+  categoria   Categoria @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
 
-  @@index([espacioId])
+  @@index([categoriaId])
 }
 
 model Testimonio {
   id               String              @id @default(uuid())
-  espacioId        String
+  categoriaId      String
   personaId        String
   modalidad        ModalidadTestimonio @default(texto_imagen)
   titulo           String
@@ -175,14 +173,14 @@ model Testimonio {
   actualizadoPorId String?
   creadoEn         DateTime            @default(now())
   actualizadoEn    DateTime            @updatedAt
-  espacio          Espacio             @relation(fields: [espacioId], references: [id], onDelete: Cascade)
+  categoria        Categoria           @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
   persona          Persona             @relation(fields: [personaId], references: [id])
   actualizadoPor   User?               @relation(fields: [actualizadoPorId], references: [id])
   etiquetas        Etiqueta[]
   revisiones       Revision[]
   medios           Medio[]
 
-  @@index([espacioId])
+  @@index([categoriaId])
   @@index([personaId])
   @@index([actualizadoPorId])
 }
@@ -204,22 +202,6 @@ model Medio {
 
   @@index([organizacionId])
   @@index([testimonioId])
-}
-
-model Categoria {
-  id             String        @id @default(uuid())
-  organizacionId String
-  espacioId      String
-  tipo           TipoCategoria
-  nombre         String
-  slug           String
-  padreId        String
-  organizacion   Organizacion  @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
-  espacios       Espacio[]
-  padre          Categoria     @relation("CategoriaPadre", fields: [padreId], references: [id], onDelete: Cascade)
-  subcategorias  Categoria[]   @relation("CategoriaPadre")
-
-  @@index([organizacionId])
 }
 
 model Etiqueta {
