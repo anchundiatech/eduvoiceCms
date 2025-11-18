@@ -10,6 +10,7 @@ export const SignupUserSchema = z
   .object({
     name: z.string().min(2, "El nombre de usuario debe contener al menos 2 caracteres"),
     email: z.email("Email Inválido"),
+    organizacion: z.string().min(2, "El nombre de la organización debe contener al menos 2 caracteres"),
     password: z
       .string()
       .regex(/[A-Z]/, "La contraseña debe contener al menos 1 letra en mayúscula")
@@ -29,3 +30,4 @@ export const SignupUserSchema = z
   );
 
 export type LoginUser = z.infer<typeof LoginUserSchema>;
+export type SignupUser = z.infer<typeof SignupUserSchema>;
