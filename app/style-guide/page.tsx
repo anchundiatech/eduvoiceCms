@@ -1,3 +1,5 @@
+import { TestimonialVisitor } from '@/components/ui/testimonial/Visitor';
+import { AdminTestimonial } from '@/components/ui/testimonial/Admin';
 import {
   Button,
   Card,
@@ -70,6 +72,45 @@ export default function StyleGuide() {
         <h2 className="text-2xl font-semibold">Card</h2>
         <Card title="Ejemplo Card">Contenido aquí.</Card>
       </section>
+
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">Testimonial Card: Visualizacion para Visitante</h2>
+        <TestimonialVisitor
+          media={{ type: "image", previewUrl: "https://img.freepik.com/fotos-premium/mujer-feliz-su-dia-graduacion-universidad-educacion-personas-esta-bien-firmar_115086-260.jpg" }}
+          testimonial='Una experiencia transformadora que cambió mi carrera. Estoy agradecida por el apoyo que me han otorgado durante mi carrera.'
+          author='Ana García'
+          role="Ingeniería de Software"
+          rating={4}
+          date='22 de noviembre de 2025'>
+        </TestimonialVisitor>
+        <h2 className="text-2xl font-semibold">Testimonial Card: Previsualización para Admin</h2>
+        <AdminTestimonial
+          tags={["Evento", "Servicio", "Pendiente"]}
+          media={{ type: "image", previewUrl: "https://img.freepik.com/fotos-premium/mujer-feliz-su-dia-graduacion-universidad-educacion-personas-esta-bien-firmar_115086-260.jpg" }}
+          testimonial='Una experiencia transformadora que cambió mi carrera. Estoy agradecida por el apoyo que me han otorgado durante mi carrera.'
+          author='Ana García'
+          role="Ingeniería de Software"
+          email="ana.garcia1@email.com"
+          rating={4}
+          date='22 de noviembre de 2025'
+          variant = "mini">
+        </AdminTestimonial>
+        <h2 className="text-2xl font-semibold">Testimonial Card: Panel moderacion para Admin</h2>
+        <AdminTestimonial
+          tags={["Evento", "Servicio", "Pendiente"]}
+          media={{ type: "image", previewUrl: "https://img.freepik.com/fotos-premium/mujer-feliz-su-dia-graduacion-universidad-educacion-personas-esta-bien-firmar_115086-260.jpg" }}
+          testimonial='Una experiencia transformadora que cambió mi carrera. Estoy agradecida por el apoyo que me han otorgado durante mi carrera.'
+          author='Ana García'
+          role="Ingeniería de Software"
+          email="ana.garcia1@email.com"
+          status='pending'
+          rating={4}
+          date='22 de noviembre de 2025'
+          history={[{user:'Elena',message:"aprobó el testimonio",time:"2 hours ago"},{user:'Admin',message:"archivó el testimonio",time:"10 hours ago"}]}
+          variant = "full">
+        </AdminTestimonial>
+      </section>
+
     </div>
   );
 }

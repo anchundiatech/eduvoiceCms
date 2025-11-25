@@ -14,7 +14,7 @@ export default function LoginPage() {
           Inicia sesión para acceder a tu cuenta de EduVoice.
         </p>
 
-        <Card bg="bg-white">
+        <Card className="bg-white">
           <LoginForm />
         </Card>
       </div>
