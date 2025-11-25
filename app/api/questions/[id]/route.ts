@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-// import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { QuestionService } from "@/models/question/questionService";
 import { QuestionUpdateSchema } from "@/models/question/dto/question";
 
@@ -7,6 +7,9 @@ const questionService = new QuestionService();
 
 // Obtiene una pregunta por ID
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const session = await auth();
+    if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
     try {
         const { id } = await params;
 
@@ -23,6 +26,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
 // Actualiza una pregunta por ID
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const session = await auth();
+    if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
     try {
         const { id } = await params;
 
@@ -43,6 +49,9 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
 // Elimina una pregunta por ID
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const session = await auth();
+    if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
     try {
         const { id } = await params;
 
