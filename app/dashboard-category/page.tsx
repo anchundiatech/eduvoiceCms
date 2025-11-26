@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button"; 
+import { Button } from "@/components/ui/button";
 import {
   Bell as BellIcon,
   Settings as SettingIcon,
@@ -23,7 +23,7 @@ export default function DashboardSpacePage() {
                <Image src="/EduVoiceCMS_logo.png" alt="Logo" fill className="object-contain" />
 
             </div>
-            <h1 className="font-lato font-bold text-xl text-primary">EduVoice CMS</h1>
+            <h1 className="font-lato font-bold text-xl text-blue-900">EduVoice CMS</h1>
           </div>
 
           <nav>
