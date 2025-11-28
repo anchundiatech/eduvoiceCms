@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { CategoryService } from "@/models/category/categoryService";
-import { CategoryFullService } from "@/models/categoryFull/categoryFullService";
-import { CategoryFullUpdateSchema } from "@/models/categoryFull/dto/categoryFull";
+import { TagService } from "@/models/tag/tagService";
+import { TagUpdateSchema } from "@/models/tag/dto/tag";
 
-const categoryService = new CategoryService();
-const categoryFullService = new CategoryFullService();
+const tagService = new TagService();
 
-// Obtiene una categoría por ID
+// Obtiene una etiqueta por ID
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
     const session = await auth();
     if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -15,10 +13,10 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     try {
         const { id } = await params;
 
-        const category = await categoryService.getCategoryById(id);
-        if (!category) return NextResponse.json({ error: "Category not found" }, { status: 404 });
+        const tag = await tagService.getTagById(id);
+        if (!tag) return NextResponse.json({ error: "Tag not found" }, { status: 404 });
 
-        return NextResponse.json(category, { status: 200 });
+        return NextResponse.json(tag, { status: 200 });
     } catch (error) {
         if (error instanceof Error) return NextResponse.json({ error: error.message }, { status: 400 });
 
@@ -26,7 +24,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     }
 };
 
-// Actualiza una categoría por ID
+// Actualiza una etiqueta por ID
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
     const session = await auth();
     if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -34,22 +32,22 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     try {
         const { id } = await params;
 
-        const categoryFounded = await categoryService.getCategoryById(id);
-        if (!categoryFounded) return NextResponse.json({ error: "Category not found" }, { status: 404 });
+        const tagFounded = await tagService.getTagById(id);
+        if (!tagFounded) return NextResponse.json({ error: "Tag not found" }, { status: 404 });
 
         const body = await request.json();
-        const dto = CategoryFullUpdateSchema.parse(body);
-        const updatedCategory = await categoryFullService.updateCategoryFull(id, dto);
+        const dto = TagUpdateSchema.parse(body);
+        const updatedTag = await tagService.updateTag(id, dto);
 
-        return NextResponse.json(updatedCategory, { status: 200 });
+        return NextResponse.json(updatedTag, { status: 200 });
     } catch (error) {
         if (error instanceof Error) return NextResponse.json({ error: error.message }, { status: 400 });
 
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
-}
+};
 
-// Elimina una categoría por ID
+// Elimina una etiqueta por ID
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
     const session = await auth();
     if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -57,14 +55,14 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     try {
         const { id } = await params;
 
-        const categoryFounded = await categoryService.getCategoryById(id);
-        if (!categoryFounded) return NextResponse.json({ error: "Category not found" }, { status: 404 });
+        const tagFounded = await tagService.getTagById(id);
+        if (!tagFounded) return NextResponse.json({ error: "Tag not found" }, { status: 404 });
 
-        await categoryService.deleteCategory(id);
+        await tagService.deleteTag(id);
         return NextResponse.json(null, { status: 204 });
     } catch (error) {
         if (error instanceof Error) return NextResponse.json({ error: error.message }, { status: 400 });
 
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
-}
+};

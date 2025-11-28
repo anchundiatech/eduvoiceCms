@@ -1,24 +1,24 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
-import { CategoryService } from "@/models/category/categoryService";
+import { TagService } from "@/models/tag/tagService";
+import { OrganizationService } from "@/models/organization/organizationService";
 
-const categoryService = new CategoryService();
+const tagService = new TagService();
+const organizationService = new OrganizationService();
 
-// Obtiene categorías por el ID de la organización
+// Obtiene etiquetas por el ID de la organización
 export async function GET(request: Request, { params }: { params: Promise<{ organizacionId: string }> }) {
     const session = await auth();
     if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     try {
         const { organizacionId } = await params;
-        const organizationFounded = await prisma.organizacion.findUnique({ where: { id: organizacionId } });
 
+        const organizationFounded = await organizationService.getOrganizationById(organizacionId);
         if (!organizationFounded) return NextResponse.json({ error: "Organization not found" }, { status: 404 });
 
-        const categories = await categoryService.getCategoryByOrganizacionId(organizacionId);
-
-        return NextResponse.json(categories, { status: 200 });
+        const tags = await tagService.getTagsByOrganizacionId(organizacionId);
+        return NextResponse.json(tags, { status: 200 });
     } catch (error) {
         if (error instanceof Error) return NextResponse.json({ error: error.message }, { status: 400 });
 
