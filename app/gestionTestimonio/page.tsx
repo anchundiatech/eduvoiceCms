@@ -1,33 +1,19 @@
 "use client";
-import { useState } from "react";
-import { Navbar } from "@/components/ui/navbar";
-import { Sidebar } from "@/components/ui/sidebar";
 import { TestimonialRender } from "../voices-hub/testimonial_render";
 import { testimonialsData } from "../landing/components/data";
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
 
 
 export default function GestorTestimonial() {
-    const [sidebarOpen, setSidebarOpen] = useState(false);
-
     return (
-        <>
-            {/* Navbar arriba */}
-            <Navbar onToggle={() => setSidebarOpen(!sidebarOpen)} />
 
-            {/* Contenedor principal con flex */}
-            <div className="flex min-h-screen">
-                {/* Sidebar */}
-                <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-
-                {/* Contenido principal, ocupa todo lo que queda */}
-                <main className="flex-1 p-6">
-
-                    <div>
-                        <TestimonialRender testimonials={testimonialsData} />
-                    </div>
-
-                </main>
+        <DashboardLayout>
+            <div className="p-6">
+                <h1 className="text-xl font-semibold">Bienvenido al dashboard</h1>
+                <div className="mt-6">
+                    <TestimonialRender testimonials={testimonialsData} />
+                </div>
             </div>
-        </>
+        </DashboardLayout>
     );
 }
