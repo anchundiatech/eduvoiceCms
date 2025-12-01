@@ -1,8 +1,8 @@
 import prisma from "@/lib/db";
 import { TestimonialFullCreateDto, TestimonialFullUpdateDto } from "./dto/testimonialFull";
 
-export class CreateTestimonialFullService {
-    async createTestimonialFull(data: TestimonialFullCreateDto) {
+export class TestimonialFullService {
+    async createTestimonialFull(data: TestimonialFullCreateDto, organizacionId: string) {
         return await prisma.$transaction(async (tx) => {
             const person = await tx.persona.upsert({
                 where: { correo: data.person.correo },
@@ -24,7 +24,19 @@ export class CreateTestimonialFullService {
                 },
             });
 
-            return { person, testimonial };
+            let medio = null;
+
+            if (data.medio) {
+                medio = await tx.medio.create({
+                    data: {
+                        ...data.medio,
+                        organizacionId,
+                        testimonioId: testimonial.id
+                    }
+                });
+            }
+
+            return { person, testimonial, medio };
         });
     };
 

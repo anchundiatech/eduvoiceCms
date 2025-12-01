@@ -1,18 +1,18 @@
 import { NextResponse } from "next/server";
-import { PersonService } from "@/models/person/personService";
-import { PersonUpdateSchema } from "@/models/person/dto/person";
+import { UserService } from "@/models/user/userService";
+import { UserUpdateSchema } from "@/models/user/dto/user";
 
-const personService = new PersonService();
+const userService = new UserService();
 
-//Obtiene una persona por su ID
+//Obtiene un usuario por su ID
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
 
-        const person = await personService.getPersonById(id);
-        if (!person) return NextResponse.json({ error: "Person not found" }, { status: 404 });
+        const user = await userService.getUserById(id);
+        if (!user) return NextResponse.json({ message: "User not found" }, { status: 404 });
 
-        return NextResponse.json(person, { status: 200 });
+        return NextResponse.json(user, { status: 200 });
     } catch (error) {
         if (error instanceof Error) return NextResponse.json({ error: error.message }, { status: 400 });
 
@@ -20,19 +20,19 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     }
 };
 
-// Actualiza una persona por su ID
+// Actualiza un usuario por su ID
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
 
-        const personFounded = await personService.getPersonById(id);
-        if (!personFounded) return NextResponse.json({ error: "Person not found" }, { status: 404 });
+        const userFounded = await userService.getUserById(id);
+        if (!userFounded) return NextResponse.json({ message: "User not found" }, { status: 404 });
 
         const body = await request.json();
-        const dto = PersonUpdateSchema.parse(body);
-        const updatedPerson = await personService.updatePerson(id, dto);
+        const dto = UserUpdateSchema.parse(body);
+        const updatedUser = await userService.updateUser(id, dto);
 
-        return NextResponse.json(updatedPerson, { status: 200 });
+        return NextResponse.json(updatedUser, { status: 200 });
     } catch (error) {
         if (error instanceof Error) return NextResponse.json({ error: error.message }, { status: 400 });
 
@@ -40,19 +40,19 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     }
 };
 
-// Elimina una persona por su ID
+// Elimina un usuario por su ID
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
 
-        const personFounded = await personService.getPersonById(id);
-        if (!personFounded) return NextResponse.json({ error: "Person not found" }, { status: 404 });
+        const userFounded = await userService.getUserById(id);
+        if (!userFounded) return NextResponse.json({ message: "User not found" }, { status: 404 });
 
-        await personService.deletePerson(id);
+        await userService.deleteUser(id);
         return new NextResponse(null, { status: 204 });
     } catch (error) {
         if (error instanceof Error) return NextResponse.json({ error: error.message }, { status: 400 });
 
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
-}
+};

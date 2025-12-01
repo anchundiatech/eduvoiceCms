@@ -22,6 +22,14 @@ export class OrganizationService {
         return user?.organizacionId || null;
     }
 
+    async getOrganizationIdByCategoryId(categoriaId: string) {
+        const category = await prisma.categoria.findUnique({
+            where: { id: categoriaId },
+            select: { organizacionId: true }
+        });
+        return category?.organizacionId || null;
+    }
+
     async getOrganizationBySlug(slug: string) {
         return await prisma.organizacion.findUnique({ where: { slug } });
     }

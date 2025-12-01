@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
 import { TestimonialService } from "@/models/testimonial/testimonialService";
-import { CreateTestimonialFullService } from "@/models/testimonialFull/testimonialFullService";
+import { OrganizationService } from "@/models/organization/organizationService";
+import { TestimonialFullService } from "@/models/testimonialFull/testimonialFullService";
 import { TestimonialFullCreateSchema } from "@/models/testimonialFull/dto/testimonialFull";
+import { sanitizeBigInt } from "@/lib/sanitizeBigInt";
 
 const testimonialService = new TestimonialService();
-const testimonialFullService = new CreateTestimonialFullService();
+const organizationService = new OrganizationService();
+const testimonialFullService = new TestimonialFullService();
 
 /**
  * @openapi
@@ -80,7 +83,11 @@ export async function POST(request: Request) {
     try {
         const body = await request.json();
         const dto = TestimonialFullCreateSchema.parse(body);
-        const newTestimonial = await testimonialFullService.createTestimonialFull(dto);
+
+        const organizacionId = await organizationService.getOrganizationIdByCategoryId(dto.testimonial.categoriaId);
+        if (!organizacionId) return NextResponse.json({ error: "Organization not found for user" }, { status: 404 });
+
+        const newTestimonial = await testimonialFullService.createTestimonialFull(dto, organizacionId);
 
         return NextResponse.json(newTestimonial, { status: 201 });
     } catch (error) {
@@ -92,6 +99,12 @@ export async function POST(request: Request) {
 
 // Obtiene todos los testimonios
 export async function GET() {
-    const testimonials = await testimonialService.getAllTestimonials();
-    return NextResponse.json(testimonials, { status: 200 });
+    try {
+        const testimonials = await testimonialService.getAllTestimonials();
+        return NextResponse.json(sanitizeBigInt(testimonials), { status: 200 });
+    } catch (error) {
+        if (error instanceof Error) return NextResponse.json({ message: error.message }, { status: 400 });
+
+        return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+    }
 };

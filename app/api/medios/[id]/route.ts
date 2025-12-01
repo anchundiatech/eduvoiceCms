@@ -1,18 +1,19 @@
 import { NextResponse } from "next/server";
-import { PersonService } from "@/models/person/personService";
-import { PersonUpdateSchema } from "@/models/person/dto/person";
+import { MedioService } from "@/models/medio/medioService";
+import { MedioUpdateSchema } from "@/models/medio/dto/medio";
+import { sanitizeBigInt } from "@/lib/sanitizeBigInt";
 
-const personService = new PersonService();
+const medioService = new MedioService();
 
-//Obtiene una persona por su ID
+// Obtiene un medio por su ID
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
 
-        const person = await personService.getPersonById(id);
-        if (!person) return NextResponse.json({ error: "Person not found" }, { status: 404 });
+        const medio = await medioService.getMedioById(id);
+        if (!medio) return NextResponse.json({ error: "Medio not found" }, { status: 404 });
 
-        return NextResponse.json(person, { status: 200 });
+        return NextResponse.json(sanitizeBigInt(medio), { status: 200 });
     } catch (error) {
         if (error instanceof Error) return NextResponse.json({ error: error.message }, { status: 400 });
 
@@ -20,19 +21,19 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     }
 };
 
-// Actualiza una persona por su ID
+// Actualiza un medio por su ID
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
 
-        const personFounded = await personService.getPersonById(id);
-        if (!personFounded) return NextResponse.json({ error: "Person not found" }, { status: 404 });
+        const medio = await medioService.getMedioById(id);
+        if (!medio) return NextResponse.json({ error: "Medio not found" }, { status: 404 });
 
         const body = await request.json();
-        const dto = PersonUpdateSchema.parse(body);
-        const updatedPerson = await personService.updatePerson(id, dto);
+        const dto = MedioUpdateSchema.parse(body);
+        const updateMedio = await medioService.updateMedio(id, dto);
 
-        return NextResponse.json(updatedPerson, { status: 200 });
+        return NextResponse.json(sanitizeBigInt(updateMedio), { status: 200 });
     } catch (error) {
         if (error instanceof Error) return NextResponse.json({ error: error.message }, { status: 400 });
 
@@ -40,19 +41,19 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     }
 };
 
-// Elimina una persona por su ID
+// Elimina un medio por su ID
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
 
-        const personFounded = await personService.getPersonById(id);
-        if (!personFounded) return NextResponse.json({ error: "Person not found" }, { status: 404 });
+        const medio = await medioService.getMedioById(id);
+        if (!medio) return NextResponse.json({ error: "Medio not found" }, { status: 404 });
 
-        await personService.deletePerson(id);
+        await medioService.deleteMedio(id);
         return new NextResponse(null, { status: 204 });
     } catch (error) {
         if (error instanceof Error) return NextResponse.json({ error: error.message }, { status: 400 });
 
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
-}
+};

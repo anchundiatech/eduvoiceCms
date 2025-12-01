@@ -59,7 +59,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
         if (!tagFounded) return NextResponse.json({ error: "Tag not found" }, { status: 404 });
 
         await tagService.deleteTag(id);
-        return NextResponse.json(null, { status: 204 });
+        return new NextResponse(null, { status: 204 });
     } catch (error) {
         if (error instanceof Error) return NextResponse.json({ error: error.message }, { status: 400 });
 

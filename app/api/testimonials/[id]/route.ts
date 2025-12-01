@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { TestimonialService } from "@/models/testimonial/testimonialService";
-import { CreateTestimonialFullService } from "@/models/testimonialFull/testimonialFullService";
+import { TestimonialFullService } from "@/models/testimonialFull/testimonialFullService";
 import { TestimonialFullUpdateSchema } from "@/models/testimonialFull/dto/testimonialFull";
+import { sanitizeBigInt } from "@/lib/sanitizeBigInt";
 
 const testimonialService = new TestimonialService();
-const createTestimonialFullService = new CreateTestimonialFullService();
+const createTestimonialFullService = new TestimonialFullService();
 
 // Obtiene un testimonio por ID
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -14,7 +15,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
         const testimonial = await testimonialService.getTestimonialById(id);
         if (!testimonial) return NextResponse.json({ message: "Testimonial not found" }, { status: 404 });
 
-        return NextResponse.json(testimonial, { status: 200 });
+        return NextResponse.json(sanitizeBigInt(testimonial), { status: 200 });
     } catch (error) {
         if (error instanceof Error) return NextResponse.json({ message: error.message }, { status: 400 });
 
@@ -51,7 +52,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
         if (!testimonialFounded) return NextResponse.json({ message: "Testimonial not found" }, { status: 404 });
 
         await testimonialService.deleteTestimonial(id);
-        return NextResponse.json(null, { status: 204 });
+        return new NextResponse(null, { status: 204 });
     } catch (error) {
         if (error instanceof Error) return NextResponse.json({ message: error.message }, { status: 400 });
 
