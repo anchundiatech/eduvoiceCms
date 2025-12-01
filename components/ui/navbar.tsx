@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export const Navbar = ({ onToggle }: { onToggle: () => void }) => {
   return (
-    <header className="w-full h-full bg-white shadow flex items-center px-4 z-50">
+    <header className="fixed h-16 top-0 left-0 w-full  bg-white shadow flex items-center px-4 z-50">
       <button className="md:hidden" onClick={onToggle}>
         <Menu className="w-6 h-6" />
       </button>
