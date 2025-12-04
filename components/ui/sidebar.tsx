@@ -4,6 +4,7 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 import { SidebarItem } from './SidebarItem';
 import { SidebarItemType } from '@/types/sidebar';
+import SignoutBtn from '@/components/auth/SignoutBtn';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -42,6 +43,8 @@ export const Sidebar = ({ items, isOpen, onClose }: SidebarProps) => {
               active={pathname.startsWith(item.href)}
             />
           ))}
+
+          <SignoutBtn />
         </div>
       </aside>
     </>
