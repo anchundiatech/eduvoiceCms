@@ -5,6 +5,34 @@ import { OrganizationUpdateSchema } from "@/models/organization/dto/organization
 
 const organizationService = new OrganizationService();
 
+/**
+ * @openapi
+ * /api/organizations/{id}:
+ *   get:
+ *     summary: Obtiene una organización por su ID
+ *     tags:
+ *       - Organización
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de la organización
+ *     responses:
+ *       200:
+ *         description: Organización obtenida
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/OrganizationCreateSchema'
+ *       400:
+ *         description: Error de validación
+ *       404:
+ *         description: Organización no encontrada
+ *       500:
+ *         description: Error interno
+ */
 //Obtiene una organización por su ID
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
@@ -24,6 +52,36 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     }
 };
 
+/**
+ * @openapi
+ * /api/organizations/{id}:
+ *   put:
+ *     summary: Actualiza una organización por su ID
+ *     tags:
+ *       - Organización
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de la organización
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/OrganizationUpdateSchema'
+ *     responses:
+ *       200:
+ *         description: Organización actualizada
+ *       400:
+ *         description: Error de validación
+ *       401:
+ *         description: No autorizado
+ *       500:
+ *         description: Error interno
+ */
 // Actualiza una organización por su ID
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
@@ -47,6 +105,30 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     }
 };
 
+/**
+ * @openapi
+ * /api/organizations/{id}:
+ *   delete:
+ *     summary: Elimina una organización por su ID
+ *     tags:
+ *       - Organización
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de la organización
+ *     responses:
+ *       204:
+ *         description: Organización eliminada
+ *       400:
+ *         description: Error de validación
+ *       404:
+ *          description: Organización no encontrada
+ *       500:
+ *          description: Error interno
+ */
 // Elimina una organización por su ID
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
@@ -59,7 +141,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
         if (!organizationFounded) return NextResponse.json({ error: "Organization not found" }, { status: 404 });
 
         await organizationService.deleteOrganization(id);
-        return NextResponse.json({ message: "Organization deleted successfully" }, { status: 204 });
+        return new NextResponse(null, { status: 204 });
     } catch (error) {
         if (error instanceof Error) return NextResponse.json({ error: error.message }, { status: 400 });
 
