@@ -1,40 +1,36 @@
-import { Home, Mail, FileText, Star, Users } from "lucide-react";
+import {
+  Home,
+  MessageSquare,
+  Tag,
+  Folder,
+  Users,
+  Settings,
+} from 'lucide-react';
+import { SidebarItemType } from '@/types/sidebar';
 
-export const menuItems = [
+export const adminMenu: SidebarItemType[] = [
+  { label: 'Inicio', href: '/home', icon: <Home /> },
   {
-    label: "Inbox",
-    href: "/inbox",
-    icon: <Mail stroke="#B0BAD4" />,
-    badge: 32,
-    active: true,
+    label: 'Testimonios',
+    href: '/testimonios',
+    icon: <MessageSquare />,
   },
+
+  { label: 'Categorías', href: 'categorias', icon: <Folder /> },
+  { label: 'Etiquetas', href: '/etiquetas', icon: <Tag /> },
+  { label: 'Usuarios', href: '/users', icon: <Users /> },
+  { label: 'Ajustes', href: '/ajustes', icon: <Settings /> },
+];
+
+export const editorMenu: SidebarItemType[] = [
+  { label: 'Inicio', href: 'home', icon: <Home /> },
   {
-    label: "Video",
-    href: "/video",
-    icon: <Home />,
-    badge: 32,
+    label: 'Testimonios',
+    href: '/dashboard/testimonios',
+    icon: <MessageSquare />,
   },
-  {
-    label: "Texto",
-    href: "/text",
-    icon: <FileText />,
-    badge: 32,
-  },
-  {
-    label: "Like",
-    href: "/like",
-    icon: <Star />,
-    badge: 32,
-  },
-  {
-    label: "Archivado",
-    href: "/archivado",
-    icon: <FileText />,
-    badge: 32,
-  },
-  {
-    label: "Añadir colaborador",
-    href: "/colaboradores",
-    icon: <Users />,
-  },
+  { label: 'Categorías', href: '/categorias', icon: <Folder /> },
+  { label: 'Etiquetas', href: '/etiquetas', icon: <Tag /> },
+  { label: 'Usuarios', href: '/users', icon: <Users /> },
+  { label: 'Ajustes', href: '/ajustes', icon: <Settings /> },
 ];

@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { CategoryService } from "@/models/category/categoryService";
-import { CategoryFullService } from "@/models/categoryFull/categoryFullService";
-import { CategoryFullUpdateSchema } from "@/models/categoryFull/dto/categoryFull";
+import { CategoryUpdateSchema } from "@/models/category/dto/category";
 
 const categoryService = new CategoryService();
-const categoryFullService = new CategoryFullService();
 
 // Obtiene una categoría por ID
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -38,8 +36,12 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
         if (!categoryFounded) return NextResponse.json({ error: "Category not found" }, { status: 404 });
 
         const body = await request.json();
-        const dto = CategoryFullUpdateSchema.parse(body);
-        const updatedCategory = await categoryFullService.updateCategoryFull(id, dto);
+
+        // Extraer solo los datos de la categoría si vienen anidados
+        const categoryData = body.category || body;
+        const dto = CategoryUpdateSchema.parse(categoryData);
+
+        const updatedCategory = await categoryService.updateCategory(id, dto);
 
         return NextResponse.json(updatedCategory, { status: 200 });
     } catch (error) {
@@ -47,6 +49,11 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
+}
+
+// Alias para PATCH (mismo comportamiento que PUT)
+export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    return PUT(request, { params });
 }
 
 // Elimina una categoría por ID

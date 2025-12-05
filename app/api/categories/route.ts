@@ -2,12 +2,10 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { CategoryService } from "@/models/category/categoryService";
 import { OrganizationService } from "@/models/organization/organizationService";
-import { CategoryFullCreateSchema } from "@/models/categoryFull/dto/categoryFull";
-import { CategoryFullService } from "@/models/categoryFull/categoryFullService";
+import { CategoryCreateSchema } from "@/models/category/dto/category";
 
 const categoryService = new CategoryService();
 const organizationService = new OrganizationService();
-const categoryFullService = new CategoryFullService();
 
 // Crea una nueva categoría
 export async function POST(request: Request) {
@@ -19,12 +17,15 @@ export async function POST(request: Request) {
 
     try {
         const body = await request.json();
-        const dto = CategoryFullCreateSchema.parse(body);
+
+        // Extraer solo los datos de la categoría si vienen anidados
+        const categoryData = body.category || body;
+        const dto = CategoryCreateSchema.parse(categoryData);
 
         const organizacionId = await organizationService.getOrganizationIdByUserId(userId);
         if (!organizacionId) return NextResponse.json({ error: "Organization not found for user" }, { status: 404 });
 
-        const newCategory = await categoryFullService.createCategoryFull(dto, userId, organizacionId);
+        const newCategory = await categoryService.createCategory(dto, userId, organizacionId);
 
         return NextResponse.json(newCategory, { status: 201 });
     } catch (error) {
