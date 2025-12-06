@@ -8,11 +8,11 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
   if (!session) redirect("/login");
 
-  const role = session?.user?.role ?? "editor";
+  const rol = session?.user?.rol ?? "editor";
 
   return (
     <GlobalContextProvider>
-      <DashboardLayout role={role}>{children}</DashboardLayout>
+      <DashboardLayout role={rol}>{children}</DashboardLayout>
     </GlobalContextProvider>
   );
 }
