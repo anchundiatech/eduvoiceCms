@@ -9,19 +9,35 @@ export const getSwaggerSpec = () => {
             info: {
                 title: "EduVoiceCMS API",
                 version: "1.0.0",
-                description: "API documentation for EduVoiceCMS",
+                description: "Documentación de todos los endpoints utilizados en la plataforma de EduVoice. En cada endpoint se menciona lo que hace.",
             },
             components: {
                 schemas,
                 securitySchemes: {
-                    bearerAuth: {
-                        type: "http",
-                        scheme: "bearer",
-                        bearerFormat: "JWT",
+                    // bearerAuth: {
+                    //     type: "http",
+                    //     scheme: "bearer",
+                    //     bearerFormat: "JWT",
+                    // }
+                    nextAuthSession: {
+                        type: "apiKey",
+                        in: "cookie",
+                        name: "next-auth.session-token"
+                    }
+                },
+                parameters: {
+                    SwaggerRequestHeader: {
+                        name: "x-requested-with",
+                        in: "header",
+                        required: false,
+                        schema: { type: "string", default: "XMLHttpRequest" },
                     }
                 }
             },
-            security: [{ bearerAuth: [] }]
+            security: [{ nextAuthSession: [] }]
         },
+        globalParameters: [
+            { $ref: "#/components/parameters/SwaggerRequestHeader" }
+        ],
     });
 };

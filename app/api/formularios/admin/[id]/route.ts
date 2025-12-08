@@ -3,9 +3,33 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/db";
 
+/**
+ * @openapi
+ * /api/formulario/admin/{id}:
+ *   delete:
+ *     summary: Elimina un formulario por el ID del administrador
+ *     tags:
+ *       - Formulario
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del administrador
+ *     responses:
+ *       204:
+ *         description: Formulario eliminado
+ *       400:
+ *         description: Error de validación
+ *       404:
+ *          description: Formulario no encontrado
+ *       500:
+ *          description: Error interno
+ */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params:  Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verificar autenticación

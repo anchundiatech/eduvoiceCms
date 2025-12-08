@@ -2,6 +2,64 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/db";
 
+/**
+ * @openapi
+ * /api/formularios:
+ *   post:
+ *     summary: Crea un formulario
+ *     tags:
+ *       - Formulario
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               titulo:
+ *                   type: string
+ *               descripcion:
+ *                   type: string
+ *               categoriaId:
+ *                   type: string
+ *               pedirNombre:
+ *                   type: boolean
+ *               pedirCorreo:
+ *                   type: boolean
+ *               permitirTexto:
+ *                   type: boolean
+ *               permitirTextoImagen:
+ *                   type: boolean
+ *               permitirVideo:
+ *                   type: boolean
+ *               mensajeGracias:
+ *                   type: string
+ *               slugPublico:
+ *                   type: string
+ *               preguntas:
+ *                   type: array
+ *             required:
+ *               - titulo
+ *               - descripcion
+ *               - categoriaId
+ *               - pedirNombre
+ *               - pedirCorreo
+ *               - permitirTexto
+ *               - permitirTextoImagen
+ *               - permitirVideo
+ *               - mensajeGracias
+ *               - slugPublico
+ *               - preguntas
+ *     responses:
+ *       201:
+ *         description: Formulario creada
+ *       400:
+ *         description: Error de validación
+ *       401:
+ *         description: No autorizado
+ *       500:
+ *         description: Error interno
+ */
 export async function POST(request: NextRequest) {
   try {
     const session = await auth();

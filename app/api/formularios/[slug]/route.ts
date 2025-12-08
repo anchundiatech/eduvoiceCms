@@ -1,6 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 
+/**
+ * @openapi
+ * /api/formulario/{slug}:
+ *   get:
+ *     summary: Obtiene una organización por el nombre de la organización
+ *     tags:
+ *       - Formulario
+ *     parameters:
+ *       - in: path
+ *         name: slug
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Nombre de la organización
+ *     responses:
+ *       200:
+ *         description: Formulario obtenido
+ *       400:
+ *         description: Error de validación
+ *       404:
+ *         description: Formulario u organización no encontrado
+ *       500:
+ *         description: Error interno
+ */
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ slug: string }> } // ← Next.js 15+ params es una Promise

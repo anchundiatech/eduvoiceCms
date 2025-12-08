@@ -2,6 +2,54 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { Persona } from "@/app/generated/prisma/client";
 
+/**
+ * @openapi
+ * /api/respuestas-formulario:
+ *   post:
+ *     summary: Crea una respuesta de un formulario
+ *     tags:
+ *       - Respuesta Formulario
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               formularioId:
+ *                   type: string
+ *               slugPublico:
+ *                   type: string
+ *               nombreCompleto:
+ *                   type: string
+ *               correo:
+ *                   type: boolean
+ *               titulo:
+ *                   type: boolean
+ *               texto:
+ *                   type: boolean
+ *               calificacion:
+ *                   type: boolean
+ *               organizacionId:
+ *             required:
+ *               - formularioId
+ *               - slugPublico
+ *               - nombreCompleto
+ *               - correo
+ *               - titulo
+ *               - texto
+ *               - calificacion
+ *               - organizacionId
+ *     responses:
+ *       201:
+ *         description: Respuesta formulario creada
+ *       400:
+ *         description: Error de validación
+ *       401:
+ *         description: No autorizado
+ *       500:
+ *         description: Error interno
+ */
 // ======================================================
 // POST → Crear una respuesta de formulario (testimonio)
 // ======================================================
@@ -156,6 +204,88 @@ export async function POST(request: NextRequest) {
   }
 }
 
+/**
+ * @openapi
+ * /api/respuestas-formulario:
+ *   get:
+ *     summary: Obtiene todas las respuestas de un formulario
+ *     tags:
+ *       - Respuesta Formulario
+ *     parameters:
+ *       - in: query
+ *         name: formularioId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del formulario para filtrar las respuestas
+ *     responses:
+ *       '200':
+ *         description: Respuestas de formularios obtenidas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 total:
+ *                   type: integer
+ *                   example: 3
+ *                 respuestas:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                       formularioId:
+ *                         type: string
+ *                       personaId:
+ *                         type: string
+ *                         nullable: true
+ *                       nombreCompleto:
+ *                         type: string
+ *                         nullable: true
+ *                       correo:
+ *                         type: string
+ *                         nullable: true
+ *                       titulo:
+ *                         type: string
+ *                       texto:
+ *                         type: string
+ *                       calificacion:
+ *                         type: integer
+ *                         example: 5
+ *                       estado:
+ *                         type: string
+ *                         example: pendiente
+ *                       imagenUrl:
+ *                         type: string
+ *                         nullable: true
+ *                       videoUrl:
+ *                         type: string
+ *                         nullable: true
+ *                       creadoEn:
+ *                         type: string
+ *                         format: date-time
+ *                       persona:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: string
+ *                           nombreCompleto:
+ *                             type: string
+ *                           correo:
+ *                             type: string
+ *                           fotoUrl:
+ *                             type: string
+ *                             nullable: true
+ *       '400':
+ *         description: Parámetros inválidos (p. ej., falta formularioId)
+ *       '500':
+ *         description: Error interno del servidor
+ */
 // ======================================================
 // GET → Obtener todas las respuestas de un formulario
 // ======================================================

@@ -8,7 +8,47 @@ import bcrypt from "bcrypt";
 const userService = new UserService();
 const organizationService = new OrganizationService();
 
-// Crear un editor
+/**
+ * @openapi
+ * /api/users/editors:
+ *   post:
+ *     summary: Crea un usuario con rol editor
+ *     tags:
+ *       - Usuario
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                   type: string
+ *               email:
+ *                   type: string
+ *               password:
+ *                   type: string
+ *               confirm:
+ *                   type: string
+ *               image:
+ *                   type: string
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *               - confirm
+ *               - image
+ *     responses:
+ *       201:
+ *         description: Editor creado
+ *       400:
+ *         description: Error de validación
+ *       401:
+ *         description: No autorizado
+ *       500:
+ *         description: Error interno
+ */
+// Crear un usuario con rol editor
 export async function POST(request: NextRequest) {
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -41,7 +81,22 @@ export async function POST(request: NextRequest) {
     }
 }
 
-// Obtener todos los editores
+/**
+ * @openapi
+ * /api/users/editors:
+ *   get:
+ *     summary: Obtiene todos los usuarios con el rol de editor
+ *     tags:
+ *       - Usuario
+ *     responses:
+ *       200:
+ *         description: Usuarios con rol editor obtenidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/QuestionCreateSchema'
+ */
+// Obtiene usuarios con rol editor
 export async function GET() {
     const usersEditors = await userService.getUserByEditorRol();
     return NextResponse.json(usersEditors, { status: 200 });

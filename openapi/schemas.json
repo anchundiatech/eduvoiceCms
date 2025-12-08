@@ -96,5 +96,114 @@
       "nombre": { "type": "string" },
       "slug": { "type": "string" }
     }
+  },
+  "QuestionCreateSchema": {
+    "type": "object",
+    "properties": {
+      "texto": { "type": "string" }
+    },
+    "required": ["texto"]
+  },
+  "QuestionUpdateSchema": {
+    "type": "object",
+    "properties": {
+      "texto": { "type": "string" }
+    }
+  },
+  "LoginUserSchema": {
+    "type": "object",
+    "properties": {
+      "email": { "type": "string" },
+      "password": { "type": "string" }
+    }
+  },
+  "SignupUserSchema": {
+    "type": "object",
+    "properties": {
+      "name": { "type": "string" },
+      "email": { "type": "string" },
+      "organizacion": { "type": "string" },
+      "password": { "type": "string" },
+      "confirm": { "type": "string" }
+    },
+    "required": ["name", "email", "organizacion", "password", "confirm"]
+  },
+  "UserUpdateSchema": {
+    "type": "object",
+    "properties": {
+      "name": { "type": "string" },
+      "password": { "type": "string" },
+      "activo": { "type": "boolean" }
+    }
+  },
+  "UserCreateSchema": {
+    "type": "object",
+    "properties": {
+      "name": { "type": "string" },
+      "email": { "type": "string" },
+      "password": { "type": "string" },
+      "confirm": { "type": "string" },
+      "image": { "type": "string" }
+    },
+    "required": ["name", "email", "password", "confirm", "image"]
+  },
+  "CategoryCreateSchema": {
+    "type": "object",
+    "properties": {
+      "nombre": { "type": "string" },
+      "titulo": { "type": "string" },
+      "mensaje": { "type": "string" }
+    },
+    "required": ["nombre", "titulo", "mensaje"]
+  },
+  "CategoryUpdateSchema": {
+    "type": "object",
+    "properties": {
+      "nombre": { "type": "string" },
+      "titulo": { "type": "string" },
+      "mensaje": { "type": "string" }
+    }
+  },
+  "CategoryInputSchema": {
+    "type": "object",
+    "properties": {
+      "nombre": { "type": "string" },
+      "titulo": { "type": "string" },
+      "mensaje": { "type": "string" }
+    },
+    "required": ["nombre", "titulo", "mensaje"]
+  },
+  "MedioCreateSchema": {
+    "type": "object",
+    "properties": {
+      "tipo": { "type": "string", "enum": ["imagen", "video"] },
+      "url": { "type": "string" },
+      "ancho": { "type": "integer" },
+      "alto": { "type": "integer" },
+      "duracionSegundos": { "type": "integer" },
+      "bytes": { "type": "integer" },
+      "leyenda": { "type": "string" }
+    },
+    "required": [
+      "tipo",
+      "url",
+      "ancho",
+      "alto",
+      "duracionSegundo",
+      "bytes",
+      "leyenda"
+    ]
+  },
+  "MedioUpdateSchema": {
+    "type": "object",
+    "properties": {
+      "tipo": { "type": "string", "enum": ["imagen", "video"] },
+      "url": { "type": "string" },
+      "ancho": { "type": "integer" },
+      "alto": { "type": "integer" },
+      "duracionSegundos": { "type": "integer" },
+      "bytes": { "type": "integer" },
+      "leyenda": { "type": "string" }
+    }
   }
 }

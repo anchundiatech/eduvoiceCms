@@ -5,12 +5,40 @@ import { sanitizeBigInt } from "@/lib/sanitizeBigInt";
 
 const medioService = new MedioService();
 
+/**
+ * @openapi
+ * /api/medios/{id}:
+ *   get:
+ *     summary: Obtiene un medio por su ID
+ *     tags:
+ *       - Medio
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del medio
+ *     responses:
+ *       200:
+ *         description: Medio obtenido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/MedioCreateSchema'
+ *       400:
+ *         description: Error de validación
+ *       404:
+ *         description: Medio no encontrado
+ *       500:
+ *         description: Error interno
+ */
 // =========================
 // GET /api/medios/[id]
 // =========================
 export async function GET(
   request: NextRequest,
-  { params }: { params:  Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
@@ -30,6 +58,38 @@ export async function GET(
   }
 }
 
+/**
+ * @openapi
+ * /api/medios/{id}:
+ *   put:
+ *     summary: Actualiza un medio por su ID
+ *     tags:
+ *       - Medio
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del medio
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/MedioUpdateSchema'
+ *     responses:
+ *       200:
+ *         description: Medio actualizado
+ *       400:
+ *         description: Error de validación
+ *       401:
+ *         description: No autorizado
+ *       404:
+ *          description: Medio no encontrado
+ *       500:
+ *         description: Error interno
+ */
 // =========================
 // PUT /api/medios/[id]
 // =========================
@@ -60,12 +120,36 @@ export async function PUT(
   }
 }
 
+/**
+ * @openapi
+ * /api/medios/{id}:
+ *   delete:
+ *     summary: Elimina un medio por su ID
+ *     tags:
+ *       - Medio
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del medio
+ *     responses:
+ *       204:
+ *         description: Medio eliminada
+ *       400:
+ *         description: Error de validación
+ *       404:
+ *          description: Medio no encontrada
+ *       500:
+ *          description: Error interno
+ */
 // =========================
 // DELETE /api/medios/[id]
 // =========================
 export async function DELETE(
   request: NextRequest,
-  { params }: { params:  Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;

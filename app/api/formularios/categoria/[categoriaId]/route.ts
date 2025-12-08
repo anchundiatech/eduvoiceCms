@@ -2,6 +2,30 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/db";
 
+/**
+ * @openapi
+ * /api/formulario/categoria/{categoriaId}:
+ *   get:
+ *     summary: Obtiene un formulario por el ID de la categoría
+ *     tags:
+ *       - Formulario
+ *     parameters:
+ *       - in: path
+ *         name: categoriaId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de la categoría
+ *     responses:
+ *       200:
+ *         description: Formulario obtenida
+ *       400:
+ *         description: Error de validación
+ *       404:
+ *         description: Formulario o categoría no encontrado
+ *       500:
+ *         description: Error interno
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ categoriaId: string }> }

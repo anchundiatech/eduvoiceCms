@@ -4,6 +4,21 @@ import { sanitizeBigInt } from "@/lib/sanitizeBigInt";
 
 const medioService = new MedioService();
 
+/**
+ * @openapi
+ * /api/medios:
+ *   get:
+ *     summary: Obtiene todos los medios
+ *     tags:
+ *       - Medio
+ *     responses:
+ *       200:
+ *         description: Medios obtenidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/MedioCreateSchema'
+ */
 // =============================
 // GET /api/medios  (todos los medios)
 // =============================
@@ -22,6 +37,47 @@ export async function GET(request: NextRequest) {
 // =============================
 // DELETE /api/medios?publicId=x&tipo=video
 // =============================
+/**
+ * @openapi
+ * /api/medios:
+ *   delete:
+ *     summary: Elimina un medio en Cloudinary
+ *     tags:
+ *       - Medio
+ *     parameters:
+ *       - in: query
+ *         name: publicId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Identificador público del recurso en Cloudinary
+ *       - in: query
+ *         name: tipo
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum: [image, video]
+ *         description: Tipo de recurso ('image' o 'video')
+ *     responses:
+ *       '200':
+ *         description: Medio eliminado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                 result:
+ *                   type: object
+ *       '400':
+ *         description: Parámetros inválidos (p. ej., falta publicId o tipo)
+ *       '500':
+ *         description: Error interno del servidor
+ */
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);

@@ -5,6 +5,34 @@ import { CategoryService } from "@/models/category/categoryService";
 
 const categoryService = new CategoryService();
 
+/**
+ * @openapi
+ * /api/categories/organization/{organizacionId}:
+ *   get:
+ *     summary: Obtiene una categoría por el ID de la organización
+ *     tags:
+ *       - Categoría
+ *     parameters:
+ *       - in: path
+ *         name: organizacionId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de la organización
+ *     responses:
+ *       200:
+ *         description: Categoría obtenida
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/CategoryCreateSchema'
+ *       400:
+ *         description: Error de validación
+ *       404:
+ *         description: Categoría u organización no encontrado
+ *       500:
+ *         description: Error interno
+ */
 // Obtiene categorías por el ID de la organización
 export async function GET(request: NextRequest, { params }: { params: Promise<{ organizacionId: string }> }) {
     const session = await auth();

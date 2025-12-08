@@ -35,10 +35,10 @@ const organizationService = new OrganizationService();
  */
 //Obtiene una organización por su ID
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-    try {
-        const session = await auth();
-        if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const session = await auth();
+    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+    try {
         const { id } = await params;
 
         const organization = await organizationService.getOrganizationById(id);
@@ -79,15 +79,17 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
  *         description: Error de validación
  *       401:
  *         description: No autorizado
+ *       404:
+ *          description: Organización no encontrada
  *       500:
  *         description: Error interno
  */
 // Actualiza una organización por su ID
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-    try {
-        const session = await auth();
-        if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const session = await auth();
+    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+    try {
         const { id } = await params;
 
         const organizationFounded = await organizationService.getOrganizationById(id);
@@ -131,10 +133,10 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
  */
 // Elimina una organización por su ID
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-    try {
-        const session = await auth();
-        if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const session = await auth();
+    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+    try {
         const { id } = await params;
 
         const organizationFounded = await organizationService.getOrganizationById(id);

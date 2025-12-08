@@ -5,6 +5,30 @@ import { CategoryUpdateSchema } from "@/models/category/dto/category";
 
 const categoryService = new CategoryService();
 
+/**
+ * @openapi
+ * /api/categories/{id}:
+ *   get:
+ *     summary: Obtiene una categoría por su ID
+ *     tags:
+ *       - Categoría
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de la categoría
+ *     responses:
+ *       200:
+ *         description: Categoría obtenida
+ *       400:
+ *         description: Error de validación
+ *       404:
+ *         description: Categoría no encontrada
+ *       500:
+ *         description: Error interno
+ */
 // Obtiene una categoría por ID
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const session = await auth();
@@ -23,6 +47,38 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 };
 
+/**
+ * @openapi
+ * /api/categories/{id}:
+ *   put:
+ *     summary: Actualiza una categoría por su ID
+ *     tags:
+ *       - Categoría
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de la categoría
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CategoryUpdateSchema'
+ *     responses:
+ *       200:
+ *         description: Categoría actualizada
+ *       400:
+ *         description: Error de validación
+ *       401:
+ *         description: No autorizado
+ *       404:
+ *          description: Categoría no encontrada
+ *       500:
+ *         description: Error interno
+ */
 // Actualiza una categoría por ID
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const session = await auth();
@@ -50,11 +106,67 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     }
 }
 
+/**
+ * @openapi
+ * /api/categories/{id}:
+ *   patch:
+ *     summary: Actualiza alguna parte de una categoría por su ID
+ *     tags:
+ *       - Categoría
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de la categoría
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CategoryUpdateSchema'
+ *     responses:
+ *       200:
+ *         description: Categoría actualizada
+ *       400:
+ *         description: Error de validación
+ *       401:
+ *         description: No autorizado
+ *       404:
+ *          description: Categoría no encontrada
+ *       500:
+ *         description: Error interno
+ */
 // Alias para PATCH (mismo comportamiento que PUT)
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     return PUT(request, { params });
 }
 
+/**
+ * @openapi
+ * /api/categories/{id}:
+ *   delete:
+ *     summary: Elimina una categoría por su ID
+ *     tags:
+ *       - Categoría
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de la categoría
+ *     responses:
+ *       204:
+ *         description: Categoría eliminada
+ *       400:
+ *         description: Error de validación
+ *       404:
+ *          description: Categoría no encontrada
+ *       500:
+ *          description: Error interno
+ */
 // Elimina una categoría por ID
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const session = await auth();

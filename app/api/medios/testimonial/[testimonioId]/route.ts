@@ -6,6 +6,34 @@ import { sanitizeBigInt } from "@/lib/sanitizeBigInt";
 const medioService = new MedioService();
 const testimonialService = new TestimonialService();
 
+/**
+ * @openapi
+ * /api/medios/testimonial/{testimonioId}:
+ *   get:
+ *     summary: Obtiene una organización por el ID del usuario
+ *     tags:
+ *       - Medio
+ *     parameters:
+ *       - in: path
+ *         name: testimonioId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del testimonio
+ *     responses:
+ *       200:
+ *         description: Medio obtenido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/MedioCreateSchema'
+ *       400:
+ *         description: Error de validación
+ *       404:
+ *         description: Medio o testimonio no encontrado
+ *       500:
+ *         description: Error interno
+ */
 // Obtiene medios por testimonioId
 export async function GET(request: NextRequest, { params }: { params: Promise<{ testimonioId: string }> }) {
     try {

@@ -9,8 +9,8 @@ export const UserCreateSchema = z.object({
         .regex(/[a-z]/, "La contraseña debe contener al menos 1 letra en minúscula")
         .regex(/[0-9]/, "La contraseña debe contener al menos 1 caracter numérico")
         .regex(/[\W_]/, "La contraseña debe contener al menos 1 caracter especial"),
-    confirm: z.string(),
     image: z.string().min(1).max(200).nullable(),
+    confirm: z.string(),
 })
     .refine(
         (data) => {
