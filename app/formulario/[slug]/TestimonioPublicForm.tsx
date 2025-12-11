@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,7 @@ interface FormularioTestimonio {
   permitirTextoImagen: boolean;
   permitirVideo: boolean;
   mensajeGracias: string;
+  urlVolverAlInicio?: string;
   preguntas: any[];
 }
 
@@ -31,12 +33,12 @@ interface TestimonioPublicFormProps {
 }
 
 export default function TestimonioPublicForm({ slug }: TestimonioPublicFormProps) {
+  const router = useRouter();
   const [formulario, setFormulario] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
-  const [exito, setExito] = useState(false);
   const [imagenUrl, setImagenUrl] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [imagenPublicId, setImagenPublicId] = useState<string>("");
@@ -195,15 +197,12 @@ export default function TestimonioPublicForm({ slug }: TestimonioPublicFormProps
       const formData = new FormData();
       formData.append("file", file);
       // No debemos  enviar "tipo" porque el servidor lo detecta automáticamente
-
-
-
       const response = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
 
-      
+
 
       if (!response.ok) {
         let errorData: any = {};
@@ -355,8 +354,12 @@ export default function TestimonioPublicForm({ slug }: TestimonioPublicFormProps
 
       const data = await response.json();
 
-      // Mostrar mensaje de éxito
-      setExito(true);
+      // Guardar mensaje y URL personalizada en sessionStorage
+      sessionStorage.setItem("mensajeGracias", formulario.mensajeGracias);
+      if (formulario.urlVolverAlInicio) {
+        sessionStorage.setItem("urlVolverAlInicio", formulario.urlVolverAlInicio);
+      }
+      router.push("/gracias");
 
       // Limpiar formulario
       setFormData({
@@ -502,14 +505,6 @@ export default function TestimonioPublicForm({ slug }: TestimonioPublicFormProps
 
         {/* FORM */}
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          {/* UI mensajes */}
-          {exito && (
-            <div className="p-3 bg-green-50 border border-green-200 rounded-lg flex gap-3">
-              <CheckCircle className="text-green-600" />
-              <p>{formulario.mensajeGracias}</p>
-            </div>
-          )}
-
           {(errorMessage || formError) && (
             <div className="p-3 bg-red-50 border border-red-200 rounded-lg flex gap-3">
               <AlertCircle className="text-red-600 shrink-0" />
