@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -28,6 +29,11 @@ export function EditUserModal({ isOpen, onClose, user }: EditUserModalProps) {
   const { updateUser } = useUsers();
   const { categories, isLoading: loadingCategories } = useCategories();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const {
     register,
@@ -50,15 +56,15 @@ export function EditUserModal({ isOpen, onClose, user }: EditUserModalProps) {
       categoriaAsignadaId: data.categoriaAsignadaId || null,
     });
     setIsSubmitting(false);
-    
+
     if (success) {
       onClose();
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
+  const content = (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md relative">
         {/* Header */}
@@ -95,15 +101,15 @@ export function EditUserModal({ isOpen, onClose, user }: EditUserModalProps) {
           {/* Email (solo lectura) */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-                
-                       <input
-              type="email"
-              value={user.email}
-              disabled
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed"
-            />
-                Email</label>
-     
+
+              <input
+                type="email"
+                value={user.email}
+                disabled
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed"
+              />
+              Email</label>
+
           </div>
 
           {/* Estado */}
@@ -167,4 +173,6 @@ export function EditUserModal({ isOpen, onClose, user }: EditUserModalProps) {
       </div>
     </div>
   );
+
+  return createPortal(content, document.body);
 }
