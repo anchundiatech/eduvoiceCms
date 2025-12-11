@@ -63,7 +63,7 @@ export default async function EditorDashboardPage() {
           </p>
         </section>
 
-        {/* Componente Placeholder */}
+        {/* Componente Placeholder
         <div className="bg-white rounded-lg shadow p-8 text-center">
           <h2 className="text-2xl font-bold text-brand-blue mb-2">
             ¡Hola bienvenido editor!
@@ -72,9 +72,10 @@ export default async function EditorDashboardPage() {
             Este es un espacio reservado para un componente que será agregado próximamente.
           </p>
         </div>
+        */}
 
-        {/*
-        // Alert si no tiene categoría asignada
+
+
         {!editorCategory && (
           <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-lg">
             <div className="flex items-center gap-3">
@@ -88,7 +89,7 @@ export default async function EditorDashboardPage() {
           </div>
         )}
 
-        // Alert de Respuestas Pendientes
+
         {respuestasPendientes > 0 && (
           <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg">
             <div className="flex items-center gap-3">
@@ -112,7 +113,7 @@ export default async function EditorDashboardPage() {
           </div>
         )}
 
-        // Categoría Asignada
+
         {editorCategory && (
           <section className="bg-white rounded-lg shadow p-6">
             <h2 className="text-xl font-bold text-gray-800 mb-4">Mi Categoría</h2>
@@ -128,10 +129,10 @@ export default async function EditorDashboardPage() {
           </section>
         )}
 
-        // Stats Grid
+
         {editorCategory && (
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            // Total de Testimonios
+
             <div className="bg-white rounded-lg shadow p-6 flex items-start gap-4">
               <div className="bg-blue-100 rounded-lg p-3">
                 <FileText className="w-6 h-6 text-blue-600" />
@@ -153,7 +154,7 @@ export default async function EditorDashboardPage() {
               </div>
             </div>
 
-            // Pendientes
+
             <div className="bg-white rounded-lg shadow p-6 flex items-start gap-4">
               <div className="bg-yellow-100 rounded-lg p-3">
                 <Clock className="w-6 h-6 text-yellow-600" />
@@ -164,7 +165,7 @@ export default async function EditorDashboardPage() {
               </div>
             </div>
 
-            // Rechazados
+          
             <div className="bg-white rounded-lg shadow p-6 flex items-start gap-4">
               <div className="bg-red-100 rounded-lg p-3">
                 <AlertCircle className="w-6 h-6 text-red-600" />
@@ -177,7 +178,7 @@ export default async function EditorDashboardPage() {
           </div>
         )}
 
-        // Acciones Rápidas
+
         {editorCategory && (
           <section className="bg-white rounded-lg shadow p-6">
             <h2 className="text-xl font-bold text-gray-800 mb-4">Acciones Rápidas</h2>
@@ -197,7 +198,7 @@ export default async function EditorDashboardPage() {
             </div>
           </section>
         )}
-        */}
+
 
       </main>
     </div>
